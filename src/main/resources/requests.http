@@ -1,1 +1,15 @@
+GET http://localhost:8080/api/v1/employee
+Accept: application/json
+
+###
+POST localhost:8080/api/v1/employee
+Content-Type: application/json
+
+{
+  "username": "Huy",
+  "password": "12345678"
+}
+
+###
 GET localhost:8080/hello
+
