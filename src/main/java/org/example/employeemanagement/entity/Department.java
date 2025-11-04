@@ -1,6 +1,7 @@
 package org.example.employeemanagement.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +19,7 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank(message = "Tên phòng ban không được để trống")
     String name;
     String description;
 
