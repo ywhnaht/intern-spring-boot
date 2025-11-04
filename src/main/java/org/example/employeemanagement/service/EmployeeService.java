@@ -2,6 +2,9 @@ package org.example.employeemanagement.service;
 
 import org.example.employeemanagement.entity.Department;
 import org.example.employeemanagement.entity.Employee;
+import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
+import org.example.employeemanagement.exception.AppException;
+import org.example.employeemanagement.exception.ErrorCode;
 import org.example.employeemanagement.repository.DepartmentRepository;
 import org.example.employeemanagement.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,20 @@ public class EmployeeService {
         this.departmentRepository = departmentRepository;
     }
 
-    public Employee createEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public Employee createEmployee(EmployeeCreateRequest employeeCreateRequest) {
+        if (employeeRepository.existsByEmail(employeeCreateRequest.getEmail())) {
+            throw new AppException(ErrorCode.EMPLOYEE_EXISTS);
+        }
+
+        Employee newEmployee = new Employee();
+
+        newEmployee.setName(employeeCreateRequest.getName());
+        newEmployee.setEmail(employeeCreateRequest.getEmail());
+
+        departmentRepository.findById(employeeCreateRequest.getDepartmentId())
+                .ifPresent(newEmployee::setDepartment);
+
+        return employeeRepository.save(newEmployee);
     }
 
     public List<Employee> getAllEmployees() {
@@ -27,21 +42,20 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+        return employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
     }
 
-    public Employee updateEmployee(Long id, Employee employee) {
-        Employee updatedEmployee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+    public Employee updateEmployee(Long id, EmployeeCreateRequest employee) {
+        Employee updatedEmployee = employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        if (employeeRepository.existsByEmail(employee.getEmail())) {
+            throw new AppException(ErrorCode.EMPLOYEE_EXISTS);
+        }
 
         updatedEmployee.setName(employee.getName());
         updatedEmployee.setEmail(employee.getEmail());
 
-        if (employee.getDepartment() != null) {
-            String departmentName = employee.getDepartment().getName();
-            Department department = departmentRepository.findByName(departmentName)
-                    .orElseGet(() -> departmentRepository.save(employee.getDepartment()));
-            updatedEmployee.setDepartment(department);
-        }
+        departmentRepository.findById(employee.getDepartmentId())
+                .ifPresent(updatedEmployee::setDepartment);
 
         return employeeRepository.save(updatedEmployee);
     }

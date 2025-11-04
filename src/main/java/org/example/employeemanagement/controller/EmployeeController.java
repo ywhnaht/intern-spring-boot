@@ -1,19 +1,18 @@
 package org.example.employeemanagement.controller;
 
+import jakarta.validation.Valid;
 import org.example.employeemanagement.entity.Employee;
+import org.example.employeemanagement.entity.dto.ApiResponse;
+import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
+import org.example.employeemanagement.exception.ErrorCode;
 import org.example.employeemanagement.service.EmployeeService;
-import org.example.employeemanagement.service.UtilityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/employee")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -21,48 +20,45 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee newEmployee) {
-        Employee employee = employeeService.createEmployee(newEmployee);
-        return ResponseEntity.ok(employee);
-    }
-
-    @GetMapping("/all")
-    public  ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employees = employeeService.getAllEmployees();
-        return ResponseEntity.ok(employees);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        Employee employee = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(employee);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee updateEmployee) {
-        Employee employee = employeeService.updateEmployee(id, updateEmployee);
-        return ResponseEntity.ok(employee);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);
-        return ResponseEntity.ok("Delete Employee successfully");
+    @PostMapping()
+    public ResponseEntity<ApiResponse<Employee>> createEmployee(@RequestBody @Valid EmployeeCreateRequest employeeCreateRequest) {
+        Employee employee = employeeService.createEmployee(employeeCreateRequest);
+        return ResponseEntity.ok(ApiResponse.success(employee, "Thêm nhân viên thành công"));
     }
 
     @GetMapping()
-    public ResponseEntity<Employee> getEmployeeByName(@RequestParam String employeeName) {
-        Employee employee = employeeService.getEmployeeByName(employeeName);
-        if (employee == null) {
-            return ResponseEntity.notFound().build();
+    public  ResponseEntity<ApiResponse<?>> getEmployees(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String departmentName
+    ) {
+        if (name != null) {
+            Employee employee = employeeService.getEmployeeByName(departmentName);
+            return ResponseEntity.ok(ApiResponse.success(employee, "Tìm thấy nhân viên với tên " + name));
         }
-        return ResponseEntity.ok(employee);
+
+        if  (departmentName != null) {
+            List<Employee> employees = employeeService.getEmployeeByDepartment(departmentName);
+            return ResponseEntity.ok(ApiResponse.success(employees, "Tìm thấy nhân viên ở phòng ban " + departmentName));
+        }
+
+        return ResponseEntity.ok(ApiResponse.success(employeeService.getAllEmployees(), "Lấy danh sách nhân viên thành công"));
     }
 
-    @GetMapping("/department")
-    public ResponseEntity<List<Employee>> getEmployeeByDepartment(@RequestParam String departmentName) {
-        List<Employee> employees = employeeService.getEmployeeByDepartment(departmentName);
-        return ResponseEntity.ok(employees);
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Employee>> getEmployeeById(@PathVariable Long id) {
+        Employee employee = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(ApiResponse.success(employee, "Tìm thấy nhân viên với id " + id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Employee>> updateEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeCreateRequest updateEmployee) {
+        Employee employee = employeeService.updateEmployee(id, updateEmployee);
+        return ResponseEntity.ok(ApiResponse.success(employee, "Cập nhật thông tin nhân viên thành công"));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok(ApiResponse.success(null, "Xóa nhân viên thành công"));
     }
 }
