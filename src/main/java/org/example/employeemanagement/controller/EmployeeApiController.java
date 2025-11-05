@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.example.employeemanagement.entity.Employee;
 import org.example.employeemanagement.entity.dto.ApiResponse;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
-import org.example.employeemanagement.exception.ErrorCode;
 import org.example.employeemanagement.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employees")
-public class EmployeeController {
+public class EmployeeApiController {
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeApiController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 

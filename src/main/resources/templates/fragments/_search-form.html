@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="search-form-container" th:fragment="searchBox">
+
+    <form th:action="@{/employees/list}" method="GET" class="search-form">
+
+        <div class="form-group">
+            <label for="keyword">Từ khóa tìm kiếm:</label>
+            <input type="text"
+                   id="keyword"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Nhập tên nhân viên hoặc phòng ban...">
+        </div>
+
+        <div class="form-group-radio">
+            <label>Tìm theo:</label>
+
+            <div>
+                <input type="radio"
+                       id="searchByName"
+                       name="searchBy"
+                       value="name"
+                       th:checked="${searchBy == 'name'}">
+                <label for="searchByName">Tên nhân viên</label>
+            </div>
+
+            <div>
+                <input type="radio"
+                       id="searchByDept"
+                       name="searchBy"
+                       value="department"
+                       th:checked="${searchBy == 'department'}">
+                <label for="searchByDept">Tên phòng ban</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-submit">Tìm kiếm</button>
+
+        <a th:href="@{/employees/list}" class="btn btn-back">Reset</a>
+    </form>
+
+</div>
+
+</body>
+</html>

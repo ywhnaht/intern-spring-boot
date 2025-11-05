@@ -9,7 +9,9 @@ import org.example.employeemanagement.repository.DepartmentRepository;
 import org.example.employeemanagement.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -70,5 +72,17 @@ public class EmployeeService {
 
     public List<Employee> getEmployeeByDepartment(String departmentName) {
         return employeeRepository.findByDepartmentName(departmentName);
+    }
+
+    public List<Employee> searchEmployees(String keyword, String searchBy) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return employeeRepository.findAll();
+        }
+
+        if ("department".equals(searchBy)) {
+            return employeeRepository.findByDepartmentName(keyword);
+        } else {
+            return employeeRepository.findByNameContainingIgnoreCase(keyword);
+        }
     }
 }
