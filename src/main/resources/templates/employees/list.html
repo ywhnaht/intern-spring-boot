@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <title>Danh sách nhân viên</title>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="mb-4">Danh sách nhân viên</h2>
+    <hr/>
+
+    <div th:replace="~{fragments/_search-form :: searchBox}"></div>
+
+    <hr/>
+
+    <div>
+        <a th:href="@{/employees/add}" class="btn btn-submit" style="margin-bottom: 20px;">
+            Thêm nhân viên mới
+        </a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Phòng ban</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${employee.department?.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
