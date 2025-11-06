@@ -60,4 +60,10 @@ public class EmployeeApiController {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Xóa nhân viên thành công"));
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<ApiResponse<Long>> getEmployeeTotal() {
+        Long totalEmployees = employeeService.countTotalEmployees();
+        return ResponseEntity.ok(ApiResponse.success(totalEmployees, "Tính tổng nhân viên thành công"));
+    }
 }
