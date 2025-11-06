@@ -9,11 +9,13 @@ import org.example.employeemanagement.repository.DepartmentRepository;
 import org.example.employeemanagement.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class EmployeeService {
@@ -94,5 +96,16 @@ public class EmployeeService {
         } else {
             return employeeRepository.findByNameContainingIgnoreCase(keyword);
         }
+    }
+
+    @Cacheable("employeeCount")
+    public long countTotalEmployees() {
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return employeeRepository.count();
     }
 }
