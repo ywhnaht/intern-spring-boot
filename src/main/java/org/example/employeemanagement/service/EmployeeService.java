@@ -7,6 +7,8 @@ import org.example.employeemanagement.exception.AppException;
 import org.example.employeemanagement.exception.ErrorCode;
 import org.example.employeemanagement.repository.DepartmentRepository;
 import org.example.employeemanagement.repository.EmployeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
     public EmployeeService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
         this.employeeRepository = employeeRepository;
@@ -36,7 +39,10 @@ public class EmployeeService {
         departmentRepository.findById(employeeCreateRequest.getDepartmentId())
                 .ifPresent(newEmployee::setDepartment);
 
-        return employeeRepository.save(newEmployee);
+        Employee savedEmployee = employeeRepository.save(newEmployee);
+        logger.info("Một nhân viên mới đã được thêm: ID={}, Tên={}", savedEmployee.getId(), savedEmployee.getName());
+
+        return savedEmployee;
     }
 
     public List<Employee> getAllEmployees() {
@@ -48,22 +54,26 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(Long id, EmployeeCreateRequest employee) {
-        Employee updatedEmployee = employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        Employee existedEmloyee = employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         if (employeeRepository.existsByEmail(employee.getEmail())) {
             throw new AppException(ErrorCode.EMPLOYEE_EXISTS);
         }
 
-        updatedEmployee.setName(employee.getName());
-        updatedEmployee.setEmail(employee.getEmail());
+        existedEmloyee.setName(employee.getName());
+        existedEmloyee.setEmail(employee.getEmail());
 
         departmentRepository.findById(employee.getDepartmentId())
-                .ifPresent(updatedEmployee::setDepartment);
+                .ifPresent(existedEmloyee::setDepartment);
 
-        return employeeRepository.save(updatedEmployee);
+        Employee updatedEmployee = employeeRepository.save(existedEmloyee);
+        logger.warn("Thông tin nhân viên ID={} đã được cập nhật.", updatedEmployee.getId());
+
+        return updatedEmployee;
     }
 
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
+        logger.warn("Đã xóa nhân viên với ID: {}", id);
     }
 
     public Employee getEmployeeByName(String employeeName) {
