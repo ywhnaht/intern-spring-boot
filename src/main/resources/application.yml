@@ -10,6 +10,11 @@ spring:
     caffeine:
       spec: expireAfterWrite=1m
 
+  security:
+    jwt:
+      secret: c4dfe1ab294c5fccbdcae00d29c33a2c6555885062b59213d2fa4108a8f0ab21
+      token-expiration: 604800000
+
 management:
   endpoints:
     web:

@@ -1,7 +1,6 @@
 package org.example.employeemanagement.service;
 
-import org.example.employeemanagement.entity.Department;
-import org.example.employeemanagement.entity.Employee;
+import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
 import org.example.employeemanagement.exception.AppException;
 import org.example.employeemanagement.exception.ErrorCode;
@@ -12,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
