@@ -8,9 +8,12 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Lỗi hệ thống không xác định", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Authentication & Authorization Errors (1xxx)
-    EMPLOYEE_EXISTS(1001, "Nhiên viên với email này đã tồn tại", HttpStatus.BAD_REQUEST),
+    EMPLOYEE_EXISTS(1001, "Nhân viên với email này đã tồn tại", HttpStatus.BAD_REQUEST),
     EMPLOYEE_NOT_FOUND(1002, "Không tìm thấy nhân viên", HttpStatus.NOT_FOUND),
-    INVALID_INPUT(1003, "Đầu vào không hợp lệ", HttpStatus.BAD_REQUEST);
+    INVALID_INPUT(1003, "Đầu vào không hợp lệ", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1004, "Token không hợp lệ hoặc đã hết hạn", HttpStatus.UNAUTHORIZED),
+    USER_NOT_FOUND(1005, "Người dùng không tồn tại", HttpStatus.NOT_FOUND),
+    USER_EXISTS(1006, "Người dùng với username này đã tồn tại", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

@@ -1,7 +1,7 @@
 package org.example.employeemanagement.controller;
 
 import jakarta.validation.Valid;
-import org.example.employeemanagement.entity.Employee;
+import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.ApiResponse;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
 import org.example.employeemanagement.service.EmployeeService;
@@ -31,7 +31,7 @@ public class EmployeeApiController {
             @RequestParam(required = false) String departmentName
     ) {
         if (name != null) {
-            Employee employee = employeeService.getEmployeeByName(departmentName);
+            Employee employee = employeeService.getEmployeeByName(name);
             return ResponseEntity.ok(ApiResponse.success(employee, "Tìm thấy nhân viên với tên " + name));
         }
 

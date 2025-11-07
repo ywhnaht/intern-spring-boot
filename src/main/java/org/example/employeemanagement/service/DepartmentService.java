@@ -1,6 +1,6 @@
 package org.example.employeemanagement.service;
 
-import org.example.employeemanagement.entity.Department;
+import org.example.employeemanagement.entity.model.Department;
 import org.example.employeemanagement.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 

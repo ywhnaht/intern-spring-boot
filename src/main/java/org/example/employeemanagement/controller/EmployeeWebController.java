@@ -1,7 +1,7 @@
 package org.example.employeemanagement.controller;
 
-import org.example.employeemanagement.entity.Department;
-import org.example.employeemanagement.entity.Employee;
+import org.example.employeemanagement.entity.model.Department;
+import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
 import org.example.employeemanagement.service.DepartmentService;
 import org.example.employeemanagement.service.EmployeeService;
