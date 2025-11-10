@@ -1,5 +1,6 @@
 package org.example.employeemanagement.service;
 
+import org.example.employeemanagement.entity.dto.DepartmentStatusDto;
 import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
 import org.example.employeemanagement.exception.AppException;
@@ -104,5 +105,9 @@ public class EmployeeService {
         }
 
         return employeeRepository.count();
+    }
+
+    public List<DepartmentStatusDto> getEmployeeCountByDepartment() {
+        return employeeRepository.findEmployeeCountByDepartment();
     }
 }

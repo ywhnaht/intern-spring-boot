@@ -1,6 +1,7 @@
 package org.example.employeemanagement.controller;
 
 import jakarta.validation.Valid;
+import org.example.employeemanagement.entity.dto.AuthResponse;
 import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.ApiResponse;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
