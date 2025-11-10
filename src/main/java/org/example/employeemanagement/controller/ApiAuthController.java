@@ -10,16 +10,13 @@ import org.example.employeemanagement.entity.dto.LoginRequest;
 import org.example.employeemanagement.entity.dto.RegisterRequest;
 import org.example.employeemanagement.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/api/auth")
-public class AuthController {
+public class ApiAuthController {
     AuthService authService;
 
     @PostMapping("/login")

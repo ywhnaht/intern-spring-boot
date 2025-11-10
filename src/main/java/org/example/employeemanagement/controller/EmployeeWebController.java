@@ -1,5 +1,6 @@
 package org.example.employeemanagement.controller;
 
+import org.example.employeemanagement.entity.dto.DepartmentStatusDto;
 import org.example.employeemanagement.entity.model.Department;
 import org.example.employeemanagement.entity.model.Employee;
 import org.example.employeemanagement.entity.dto.EmployeeCreateRequest;
@@ -50,5 +51,16 @@ public class EmployeeWebController {
         employeeService.createEmployee(employee);
 
         return "redirect:/employees/list";
+    }
+
+    @GetMapping("/statistics")
+    public String showEmployeeStatistics(Model model) {
+        long totalEmployee = employeeService.countTotalEmployees();
+        List<DepartmentStatusDto> totalEmployeeByDepartment = employeeService.getEmployeeCountByDepartment();
+
+        model.addAttribute("totalEmployees", totalEmployee);
+        model.addAttribute("totalEmployeesByDepartments", totalEmployeeByDepartment);
+
+        return "employees/statistics";
     }
 }

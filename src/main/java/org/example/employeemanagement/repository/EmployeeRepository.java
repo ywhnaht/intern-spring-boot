@@ -1,5 +1,6 @@
 package org.example.employeemanagement.repository;
 
+import org.example.employeemanagement.entity.dto.DepartmentStatusDto;
 import org.example.employeemanagement.entity.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
         where d.name like %:name%
     """)
     List<Employee> findByDepartmentName(@Param("name") String name);
+
+    @Query("""
+        select new org.example.employeemanagement.entity.dto.DepartmentStatusDto(e.department.name, COUNT(e.id))
+        from Employee e
+        group by e.department.name
+        order by COUNT(e.id) desc 
+    """)
+    List<DepartmentStatusDto> findEmployeeCountByDepartment();
 }
